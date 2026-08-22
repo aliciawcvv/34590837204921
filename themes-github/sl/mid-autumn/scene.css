@@ -1,0 +1,238 @@
+/* Mid-autumn success scene.
+   Attribution:
+   - Scene composition adapted from https://codepen.io/cmtran/pen/OJZMpov (MIT)
+   - Falling motion pattern loosely adapted from https://codepen.io/uurrnn/pen/WNLVdN (MIT)
+
+   Scoping: everything is namespaced under .slma-* so the host page's styles
+   cannot leak in and this file cannot leak out.
+
+   Falling particles: the extension fills .slma-stars with <i> nodes carrying
+   --slma-star-op / --slma-drift / --slma-rot custom properties. Restyle
+   .slma-stars i to change appearance (snowflakes, leaves, sparkles, etc). */
+
+.slma-backdrop {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(17,57,82,0.42) 0%, rgba(10,14,39,0.55) 60%, rgba(10,14,39,0.72) 100%);
+  opacity: 0;
+  animation: slma-fadein 700ms ease-out forwards;
+}
+.slma-stage {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(var(--slma-scale, 1));
+  transform-origin: center;
+  width: 820px; height: 620px;
+  opacity: 0;
+  animation:
+    slma-enter 900ms cubic-bezier(.2,1.5,.4,1) 100ms forwards,
+    slma-pulse 4200ms ease-in-out 1200ms infinite;
+}
+.slma *, .slma *::before, .slma *::after { box-sizing: border-box; position: absolute; content: ""; }
+.slma { position: absolute; inset: 0; }
+
+.slma .moon {
+  width: 400px; height: 400px; z-index: 1;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: #c7edf8;
+  box-shadow: 0 0 100px #c7edf8, inset -20px -20px #b0e3f4;
+}
+.slma .moon .craters {
+  width: 80px; height: 80px; border-radius: 50%;
+  background-color: #b0e3f4;
+  left: 20%; top: 20%;
+  box-shadow: inset -5px -5px #83d3ee;
+}
+.slma .moon .craters::after {
+  width: 70px; height: 70px; border-radius: 50%;
+  background-color: #b0e3f4;
+  box-shadow: inset -5px -5px #83d3ee;
+  left: -30%; top: 200%;
+}
+.slma .moon .craters::before {
+  width: 70px; height: 68px; border-radius: 50%;
+  background-color: #b0e3f4;
+  box-shadow: inset -5px -5px #83d3ee;
+  left: 230%; top: 125%;
+}
+
+.slma .stars-1, .slma .stars-2 {
+  width: 100%; height: 100%; z-index: 1;
+}
+.slma .star-1 {
+  width: 10px; height: 10px;
+  background-color: #c7edf8; border-radius: 50%;
+}
+.slma .star-1:nth-child(1) { top: 10%; left: 25%; }
+.slma .star-1:nth-child(2) { top: 88%; left: 75%; }
+.slma .star-1:nth-child(3) { top: 61%; left: 18%; }
+.slma .star-1:nth-child(4) { top: 75%; left: 22%; }
+.slma .star-1:nth-child(5) { top: 8%;  left: 75%; }
+.slma .star-1:nth-child(6) { top: 56%; left: 77%; }
+.slma .star-1:nth-child(7) { top: 61%; left: 82%; }
+.slma .star-2 {
+  width: 20px; height: 20px;
+  background-color: #c7edf8; border-radius: 50%;
+  box-shadow: 2px 2px 10px #c7edf8;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  animation: slma-twinkle 2400ms ease-in-out infinite;
+}
+.slma .star-2:nth-child(1) { top: 14%; left: 18%; animation-delay: 0ms; }
+.slma .star-2:nth-child(2) { top: 12%; left: 65%; animation-delay: 400ms; }
+.slma .star-2:nth-child(3) { top: 75%; left: 12%; animation-delay: 800ms; }
+.slma .star-2:nth-child(4) { top: 18%; left: 88%; animation-delay: 1200ms; }
+.slma .star-2:nth-child(5) { top: 68%; left: 82%; animation-delay: 200ms; }
+.slma .star-2:nth-child(6) { top: 90%; left: 52%; animation-delay: 600ms; }
+.slma .star-2:nth-child(7) { top: 10%; left: 42%; animation-delay: 1000ms; }
+
+.slma .clouds { width: 100%; height: 100%; z-index: 2; }
+.slma .cloud {
+  background-color: #c22b6d;
+  width: 250px; height: 60px;
+  top: 26%; left: 22%;
+  border-radius: 80px 80px 10px 10px;
+  box-shadow: 0 0 10px #d74987, inset -5px -5px #ad2661;
+  z-index: 2;
+  animation: slma-drift 8000ms ease-in-out infinite;
+}
+.slma .cloud::after {
+  border-radius: 50%;
+  width: 80px; height: 80px;
+  background-color: #c22b6d;
+  top: -30px; right: 30px;
+  box-shadow: -40px -10px 0 8px #c22b6d, -80px -5px 0 1px #c22b6d;
+}
+.slma .cloud:nth-child(2) {
+  top: 74%; left: 57%;
+  animation-delay: 2000ms;
+  animation-duration: 9500ms;
+}
+
+.slma .rabbit {
+  width: 120px; height: 240px;
+  top: 50%; left: 50%; z-index: 3;
+}
+.slma .rabbit .head { width: 100%; left: 10%; height: 100px; z-index: 4; }
+.slma .rabbit .face {
+  background-color: #eb9512;
+  border-radius: 45% 55% 31% 69% / 42% 57% 43% 58%;
+  box-shadow: inset -3px 3px 0 rgba(199,237,248,0.1);
+  width: 100%; top: 5%; height: 90%; z-index: 2;
+}
+.slma .rabbit .eye {
+  background-color: #113952;
+  border-radius: 50%;
+  width: 16px; height: 16px;
+  left: 35%; top: 20%; z-index: 3;
+}
+.slma .rabbit .head > .mouth {
+  border-radius: 0 0 90px 90px;
+  width: 25px; height: 15px;
+  top: 56%; left: 20px;
+  background-color: #ad2661;
+}
+.slma .rabbit .ears {
+  width: 30px; height: 135px;
+  top: 18px; left: 105px;
+  background-color: #c22b6d;
+  border-radius: 0 100% 32% 68% / 74% 41% 59% 26%;
+  box-shadow: 0 0 40px #c22b6d;
+  z-index: 4;
+  perspective: 90px;
+  transform: rotate(-5deg);
+}
+.slma .rabbit::before {
+  width: 20px; height: 95px;
+  top: 28px; left: 120px;
+  background-color: #d74987;
+  z-index: 6;
+  border-radius: 0 100% 32% 68% / 74% 41% 59% 26%;
+  transform: rotate(-5deg);
+}
+.slma .rabbit .body {
+  top: 58px; width: 100%; height: 150px; left: 10%;
+  background-color: #dd8c11;
+  border-radius: 39% 61% 57% 43% / 51% 76% 24% 49%;
+  box-shadow: 0 0 40px #eb9512;
+  z-index: 2;
+}
+.slma .rabbit .leg {
+  left: 22px; top: 135px; width: 50px; height: 24px;
+  border-radius: 70% 30% 73% 27% / 52% 56% 44% 48%;
+  box-shadow: inset 10px 0 0 rgba(199,237,248,0.2);
+  transform: rotate(-25deg);
+  background-color: #dd8c11;
+  z-index: 4;
+}
+.slma .rabbit .leg-right { transform: rotate(-25deg); left: -18px; }
+.slma .rabbit .arm {
+  background-color: #dd8c11;
+  box-shadow: inset 0 10px 0 rgba(199,237,248,0.2);
+  top: 44px; left: -22px;
+  border-radius: 39% 61% 57% 43% / 51% 76% 24% 49%;
+  width: 22px; height: 50px;
+  transform: rotate(-115deg);
+  z-index: 4;
+}
+.slma .rabbit .arm-right { left: 44px; }
+.slma .rabbit .tail {
+  top: 100px; right: -30px; width: 30px; height: 30px;
+  border-radius: 50%;
+  background-color: #e28f11;
+  z-index: 2;
+}
+
+.slma-stars {
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden;
+}
+.slma-stars i {
+  position: absolute;
+  top: -40px;
+  display: inline-block;
+  opacity: 0;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: slma-fall linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes slma-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slma-enter {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(calc(var(--slma-scale, 1) * 0.55)); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(var(--slma-scale, 1)); }
+}
+@keyframes slma-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(var(--slma-scale, 1)); }
+  50%      { transform: translate(-50%, -50%) scale(calc(var(--slma-scale, 1) * 1.028)); }
+}
+@keyframes slma-twinkle {
+  0%, 100% { opacity: 0.55; transform: scale(0.9); }
+  50%      { opacity: 1;    transform: scale(1.15); }
+}
+@keyframes slma-drift {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(20px); }
+}
+@keyframes slma-fall {
+  0%   { opacity: 0; transform: translate3d(0, -40px, 0) rotate(0deg); }
+  8%   { opacity: var(--slma-star-op, 0.9); }
+  92%  { opacity: var(--slma-star-op, 0.9); }
+  100% {
+    opacity: 0;
+    transform:
+      translate3d(var(--slma-drift, -90px), calc(100vh + 60px), 0)
+      rotate(var(--slma-rot, 540deg));
+  }
+}
+@keyframes slma-exit {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(var(--slma-scale, 1)); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(calc(var(--slma-scale, 1) * 0.92)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slma-stage { animation: slma-fadein 400ms ease-out forwards; }
+  .slma-stars { display: none; }
+  .slma .cloud, .slma .star-2 { animation: none; }
+}
