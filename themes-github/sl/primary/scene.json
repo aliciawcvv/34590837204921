@@ -10,6 +10,11 @@
     { "id": "stripe-transfer", "asset": "stripe-transfer-success.svg" },
     { "id": "stripe", "asset": "stripe.svg" },
     { "id": "successful-payment", "asset": "successful-payment.svg" },
-    { "id": "transfer-wallet", "asset": "transfer-money-wallet.svg" }
+    { "id": "transfer-wallet", "asset": "transfer-money-wallet.svg" },
+    { "id": "done", "asset": "done.svg" },
+    { "id": "rocket", "asset": "rocket-launched-into-space.svg" },
+    { "id": "success-tick", "asset": "success-progress-tick.svg" },
+    { "id": "success", "asset": "success.svg" },
+    { "id": "unicorn", "asset": "unicorn.svg" }
   ]
 }
