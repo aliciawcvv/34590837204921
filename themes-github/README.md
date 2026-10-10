@@ -93,7 +93,8 @@ hợp lệ, bị strip hoặc load bundled fallback thay thế.
 
 SVG lớn (>96KB) để trong folder theme + `layers[]`, không inline vào
 `scene.html`. Tên file phải khớp `[a-z0-9._-]+.svg` (không dấu cách).
-Mỗi file ≤ 300KB — `Stripe Scratch.svg` (514KB) bị bỏ.
+Mỗi file ≤ 512KB. Với SVG animation/Lottie, giữ nguyên cấu trúc export; không chạy SVGO kiểu
+cleanup ID/multipass vì có thể làm đứt liên kết mask, transform và timing giữa các layer.
 
 ## Bundled fallback
 
