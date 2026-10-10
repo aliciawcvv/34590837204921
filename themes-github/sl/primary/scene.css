@@ -1,0 +1,106 @@
+/* Primary success scene.
+   Engine hooks: .slma-backdrop, .slma-stage, .slma-hero (random SVG),
+   .slma-stars[data-kind="sparkle"] (soft rising glitter). */
+
+.slma-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(99, 91, 255, 0.10) 0%, rgba(18, 20, 36, 0.18) 55%, rgba(10, 12, 22, 0.24) 100%);
+  opacity: 0;
+  animation: slma-fadein 600ms ease-out forwards;
+}
+
+.slma-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  animation: slma-enter 800ms cubic-bezier(.2, 1.2, .4, 1) 60ms forwards;
+}
+
+.slma-hero {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.slma-hero svg {
+  display: block;
+  width: min(62vmin, 640px);
+  height: min(62vmin, 640px);
+  overflow: visible;
+  filter: drop-shadow(0 18px 40px rgba(20, 16, 48, 0.18));
+}
+
+.slma-hero.is-compact svg {
+  width: min(40vmin, 380px);
+  height: min(40vmin, 380px);
+}
+
+@media (max-width: 720px) {
+  .slma-hero svg {
+    width: min(90vw, 80vh);
+    height: min(90vw, 80vh);
+  }
+  .slma-hero.is-compact svg {
+    width: min(56vw, 50vh);
+    height: min(56vw, 50vh);
+  }
+}
+
+.slma-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.slma-stars i {
+  position: absolute;
+  top: auto;
+  bottom: -16px;
+  display: inline-block;
+  opacity: 0;
+  border-radius: 50%;
+  clip-path: none;
+  animation: slma-fall ease-out infinite;
+  will-change: transform, opacity;
+  box-shadow: 0 0 6px rgba(255, 244, 200, 0.42);
+}
+
+@keyframes slma-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slma-enter {
+  0%   { opacity: 0; transform: scale(0.94); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slma-fall {
+  0%   { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.5); }
+  12%  { opacity: var(--slma-star-op, 0.4); }
+  58%  { opacity: var(--slma-star-op, 0.4); }
+  100% {
+    opacity: 0;
+    transform:
+      translate3d(var(--slma-drift, 0px), calc(-100vh - 40px), 0)
+      scale(1);
+  }
+}
+
+@keyframes slma-exit {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.97); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slma-stage { animation: slma-fadein 360ms ease-out forwards; }
+  .slma-stars { display: none; }
+}
