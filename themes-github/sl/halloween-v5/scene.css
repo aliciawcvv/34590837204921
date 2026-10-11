@@ -1,0 +1,483 @@
+/* Halloween success scene. The wrapper is shipped by the theme so both old and
+   new extension players provide the variable scope used by the backdrop. */
+
+.slma-scene-root {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  --slma-sky-top: #14091f;
+  --slma-sky-mid: #2c123c;
+  --slma-sky-bottom: #07050c;
+  --slma-orb: rgba(186, 120, 255, 0.34);
+  --slma-fog: rgba(126, 78, 158, 0.2);
+  --slma-fog-soft: rgba(35, 190, 178, 0.12);
+  --slma-ground: rgba(197, 111, 255, 0.34);
+  --slma-particle: #f4d9ff;
+  --slma-hero-width: min(66vmin, 680px);
+  --slma-hero-height: min(66vmin, 680px);
+  --slma-hero-filter: drop-shadow(0 24px 54px rgba(3, 0, 8, 0.64));
+}
+
+.slma-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 36%, var(--slma-orb) 0%, transparent 28%),
+    radial-gradient(ellipse at 50% 108%, var(--slma-fog-soft) 0%, transparent 58%),
+    linear-gradient(160deg, var(--slma-sky-top) 0%, var(--slma-sky-mid) 52%, var(--slma-sky-bottom) 100%);
+  filter: opacity(0.72);
+  animation: slma-fadein 780ms ease-out forwards;
+}
+
+.slma-backdrop::before,
+.slma-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+}
+
+.slma-backdrop::before {
+  opacity: 0.56;
+  background:
+    repeating-radial-gradient(circle at 32% 44%, transparent 0 28px, rgba(255, 255, 255, 0.018) 30px 31px),
+    radial-gradient(ellipse at 68% 52%, var(--slma-fog) 0%, transparent 44%);
+  filter: blur(16px);
+  animation: slma-breathe 5200ms ease-in-out infinite;
+}
+
+.slma-backdrop::after {
+  opacity: 0.34;
+  background-image: repeating-linear-gradient(104deg, transparent 0 7px, rgba(255, 255, 255, 0.025) 8px 9px);
+  mix-blend-mode: soft-light;
+}
+
+.slma-moon-haze {
+  position: absolute;
+  left: 50%;
+  top: 43%;
+  width: min(68vmin, 720px);
+  height: min(68vmin, 720px);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--slma-orb) 0%, transparent 68%);
+  filter: blur(18px);
+  animation: slma-haze 4300ms ease-in-out infinite;
+}
+
+.slma-fog {
+  position: absolute;
+  left: -18%;
+  width: 136%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 20% 50%, var(--slma-fog) 0%, transparent 30%),
+    radial-gradient(ellipse at 56% 42%, var(--slma-fog-soft) 0%, transparent 36%),
+    radial-gradient(ellipse at 88% 60%, var(--slma-fog) 0%, transparent 28%);
+  filter: blur(28px);
+  will-change: transform, opacity;
+}
+
+.slma-fog-back {
+  bottom: 10%;
+  height: 42%;
+  opacity: 0.58;
+  animation: slma-fog-drift 7800ms ease-in-out infinite alternate;
+}
+
+.slma-fog-front {
+  bottom: -12%;
+  height: 46%;
+  opacity: 0.86;
+  filter: blur(36px);
+  animation: slma-fog-drift 6200ms ease-in-out -2400ms infinite alternate-reverse;
+}
+
+.slma-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  animation: slma-enter 960ms cubic-bezier(.16, 1, .3, 1) 90ms forwards;
+}
+
+.slma-hero {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.slma-hero svg {
+  display: block;
+  width: var(--slma-hero-width);
+  height: var(--slma-hero-height);
+  max-width: 92vw;
+  max-height: 86vh;
+  overflow: visible;
+  filter: var(--slma-hero-filter);
+}
+
+.slma-ground-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  width: min(66vw, 720px);
+  height: 13vh;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, var(--slma-ground) 0%, transparent 70%);
+  filter: blur(24px);
+  opacity: 0.7;
+  animation: slma-ground-pulse 3300ms ease-in-out infinite;
+}
+
+.slma-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.slma-stars i {
+  position: absolute;
+  bottom: -18px;
+  display: block;
+  opacity: 0;
+  border-radius: 50%;
+  background: var(--slma-particle) !important;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--slma-particle) 72%, transparent);
+  animation: slma-fall ease-out infinite;
+  will-change: transform, opacity;
+}
+
+.slma-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(2, 1, 5, 0.28), transparent 18%, transparent 82%, rgba(2, 1, 5, 0.28)),
+    radial-gradient(ellipse at center, transparent 42%, rgba(2, 1, 5, 0.52) 100%);
+  opacity: 0.55;
+}
+
+/* Bone theatre: ivory figure, blood moon, ember bats. */
+:is(.slma-scene-root[data-slma-asset="death-dance.svg"], .slma-scene-root:has(.slma-hero[data-asset="death-dance.svg"])) {
+  --slma-sky-top: #18070d;
+  --slma-sky-mid: #3b0e18;
+  --slma-sky-bottom: #050305;
+  --slma-orb: rgba(255, 86, 34, 0.4);
+  --slma-fog: rgba(158, 27, 38, 0.28);
+  --slma-fog-soft: rgba(255, 129, 50, 0.13);
+  --slma-ground: rgba(255, 78, 30, 0.35);
+  --slma-particle: #ff8a45;
+  --slma-hero-filter: drop-shadow(0 20px 52px rgba(248, 70, 28, 0.28));
+}
+
+/* Playful apparition: violet carnival haze with a neon tongue accent. */
+:is(.slma-scene-root[data-slma-asset="cheeky-ghost.svg"], .slma-scene-root:has(.slma-hero[data-asset="cheeky-ghost.svg"])) {
+  --slma-sky-top: #160d2e;
+  --slma-sky-mid: #43205a;
+  --slma-sky-bottom: #070612;
+  --slma-orb: rgba(202, 93, 255, 0.36);
+  --slma-fog: rgba(106, 70, 190, 0.27);
+  --slma-fog-soft: rgba(255, 48, 151, 0.16);
+  --slma-ground: rgba(241, 55, 158, 0.28);
+  --slma-particle: #ff72c6;
+}
+
+/* Cemetery panorama: low wine fog, amber lantern pool, wider composition. */
+:is(.slma-scene-root[data-slma-asset="ghost-cemetery.svg"], .slma-scene-root:has(.slma-hero[data-asset="ghost-cemetery.svg"])) {
+  --slma-sky-top: #170a21;
+  --slma-sky-mid: #4d102d;
+  --slma-sky-bottom: #080409;
+  --slma-orb: rgba(255, 179, 69, 0.28);
+  --slma-fog: rgba(133, 28, 63, 0.32);
+  --slma-fog-soft: rgba(245, 85, 85, 0.14);
+  --slma-ground: rgba(255, 150, 49, 0.32);
+  --slma-particle: #ffc05e;
+  --slma-hero-width: min(84vw, 980px);
+  --slma-hero-height: min(62vh, 620px);
+}
+
+/* Pale ghost: cold moonlight and washed cyan mist. */
+:is(.slma-scene-root[data-slma-asset="shy-blue-ghost.svg"], .slma-scene-root:has(.slma-hero[data-asset="shy-blue-ghost.svg"])) {
+  --slma-sky-top: #071625;
+  --slma-sky-mid: #123b50;
+  --slma-sky-bottom: #03080d;
+  --slma-orb: rgba(175, 242, 255, 0.32);
+  --slma-fog: rgba(89, 185, 208, 0.22);
+  --slma-fog-soft: rgba(188, 239, 255, 0.16);
+  --slma-ground: rgba(109, 221, 255, 0.24);
+  --slma-particle: #d5f8ff;
+  --slma-hero-filter: drop-shadow(0 20px 48px rgba(115, 226, 255, 0.28));
+}
+
+/* Midnight deadline: saturated fuchsia, violet and acid pumpkin light. */
+:is(.slma-scene-root[data-slma-asset="pumpkin-alarm.svg"], .slma-scene-root:has(.slma-hero[data-asset="pumpkin-alarm.svg"])) {
+  --slma-sky-top: #1f0737;
+  --slma-sky-mid: #581054;
+  --slma-sky-bottom: #0b0613;
+  --slma-orb: rgba(255, 47, 154, 0.35);
+  --slma-fog: rgba(116, 33, 185, 0.28);
+  --slma-fog-soft: rgba(255, 210, 30, 0.12);
+  --slma-ground: rgba(255, 221, 26, 0.28);
+  --slma-particle: #f5ff50;
+}
+
+/* Balloon flight: storm-blue sky with electric aqua lift. */
+:is(.slma-scene-root[data-slma-asset="haunted-balloons.svg"], .slma-scene-root:has(.slma-hero[data-asset="haunted-balloons.svg"])) {
+  --slma-sky-top: #07142c;
+  --slma-sky-mid: #123e64;
+  --slma-sky-bottom: #061018;
+  --slma-orb: rgba(20, 219, 235, 0.25);
+  --slma-fog: rgba(33, 116, 168, 0.25);
+  --slma-fog-soft: rgba(25, 225, 230, 0.16);
+  --slma-ground: rgba(24, 202, 225, 0.25);
+  --slma-particle: #82f8ff;
+}
+
+/* Black cat: restrained navy with a strong harvest moon halo. */
+:is(.slma-scene-root[data-slma-asset="moonlit-black-cat.svg"], .slma-scene-root:has(.slma-hero[data-asset="moonlit-black-cat.svg"])) {
+  --slma-sky-top: #0a1028;
+  --slma-sky-mid: #242047;
+  --slma-sky-bottom: #05050a;
+  --slma-orb: rgba(255, 201, 112, 0.44);
+  --slma-fog: rgba(86, 71, 135, 0.24);
+  --slma-fog-soft: rgba(255, 152, 45, 0.13);
+  --slma-ground: rgba(255, 136, 26, 0.31);
+  --slma-particle: #ffe3a6;
+  --slma-hero-width: min(84vmin, 840px);
+  --slma-hero-height: min(84vmin, 840px);
+}
+
+/* Candy burst: magenta syrup, cyan sugar and orange glints. */
+:is(.slma-scene-root[data-slma-asset="cursed-candies.svg"], .slma-scene-root:has(.slma-hero[data-asset="cursed-candies.svg"])) {
+  --slma-sky-top: #21082f;
+  --slma-sky-mid: #5d164a;
+  --slma-sky-bottom: #090710;
+  --slma-orb: rgba(255, 44, 193, 0.31);
+  --slma-fog: rgba(151, 42, 136, 0.28);
+  --slma-fog-soft: rgba(0, 226, 238, 0.15);
+  --slma-ground: rgba(255, 137, 30, 0.31);
+  --slma-particle: #64f7ff;
+}
+
+:is(.slma-scene-root[data-slma-asset="cursed-candies.svg"], .slma-scene-root:has(.slma-hero[data-asset="cursed-candies.svg"])) .slma-hero svg {
+  transform: scale(1.16);
+  transform-origin: center;
+}
+
+/* Haunted estate: deep ultramarine silhouettes and sulphur windows. */
+:is(.slma-scene-root[data-slma-asset="haunted-house.svg"], .slma-scene-root:has(.slma-hero[data-asset="haunted-house.svg"])) {
+  --slma-sky-top: #08092a;
+  --slma-sky-mid: #25205c;
+  --slma-sky-bottom: #05050e;
+  --slma-orb: rgba(255, 232, 43, 0.34);
+  --slma-fog: rgba(74, 61, 160, 0.3);
+  --slma-fog-soft: rgba(82, 140, 255, 0.15);
+  --slma-ground: rgba(255, 151, 23, 0.27);
+  --slma-particle: #fff17b;
+  --slma-hero-filter: drop-shadow(0 22px 58px rgba(85, 76, 255, 0.32));
+}
+
+/* Shadow ghost: monochrome ash and a narrow moon halo. */
+:is(.slma-scene-root[data-slma-asset="shadow-ghost.svg"], .slma-scene-root:has(.slma-hero[data-asset="shadow-ghost.svg"])) {
+  --slma-sky-top: #0d1016;
+  --slma-sky-mid: #242832;
+  --slma-sky-bottom: #050608;
+  --slma-orb: rgba(224, 229, 239, 0.22);
+  --slma-fog: rgba(156, 163, 175, 0.2);
+  --slma-fog-soft: rgba(207, 217, 230, 0.12);
+  --slma-ground: rgba(194, 200, 211, 0.19);
+  --slma-particle: #dfe4ed;
+}
+
+/* Monster gathering: purple twilight with toxic chartreuse moonlight. */
+:is(.slma-scene-root[data-slma-asset="midnight-monsters.svg"], .slma-scene-root:has(.slma-hero[data-asset="midnight-monsters.svg"])) {
+  --slma-sky-top: #190a2f;
+  --slma-sky-mid: #4a195c;
+  --slma-sky-bottom: #08050e;
+  --slma-orb: rgba(237, 255, 43, 0.3);
+  --slma-fog: rgba(104, 44, 139, 0.29);
+  --slma-fog-soft: rgba(207, 34, 102, 0.14);
+  --slma-ground: rgba(195, 255, 50, 0.22);
+  --slma-particle: #efff78;
+}
+
+/* Wisp: rain-cold blue with a floating silver ground reflection. */
+:is(.slma-scene-root[data-slma-asset="phantom-wisp.svg"], .slma-scene-root:has(.slma-hero[data-asset="phantom-wisp.svg"])) {
+  --slma-sky-top: #07121f;
+  --slma-sky-mid: #17354e;
+  --slma-sky-bottom: #03070c;
+  --slma-orb: rgba(173, 215, 255, 0.3);
+  --slma-fog: rgba(67, 132, 176, 0.27);
+  --slma-fog-soft: rgba(184, 231, 255, 0.14);
+  --slma-ground: rgba(115, 196, 255, 0.24);
+  --slma-particle: #d5efff;
+  --slma-hero-width: min(88vmin, 880px);
+  --slma-hero-height: min(88vmin, 880px);
+}
+
+/* Jack-o-lantern: furnace orange against an almost-black forest green. */
+:is(.slma-scene-root[data-slma-asset="animated-jack-o-lantern.svg"], .slma-scene-root:has(.slma-hero[data-asset="animated-jack-o-lantern.svg"])) {
+  --slma-sky-top: #101407;
+  --slma-sky-mid: #34220a;
+  --slma-sky-bottom: #050603;
+  --slma-orb: rgba(255, 127, 21, 0.38);
+  --slma-fog: rgba(104, 81, 22, 0.26);
+  --slma-fog-soft: rgba(95, 220, 48, 0.11);
+  --slma-ground: rgba(255, 112, 15, 0.38);
+  --slma-particle: #ffb648;
+  --slma-hero-filter: drop-shadow(0 25px 58px rgba(255, 105, 18, 0.34));
+}
+
+/* Tall apparition: elongated cold-indigo shaft and spectral ground fog. */
+:is(.slma-scene-root[data-slma-asset="floating-apparition.svg"], .slma-scene-root:has(.slma-hero[data-asset="floating-apparition.svg"])) {
+  --slma-sky-top: #080d22;
+  --slma-sky-mid: #182b51;
+  --slma-sky-bottom: #03050c;
+  --slma-orb: rgba(173, 209, 255, 0.27);
+  --slma-fog: rgba(75, 114, 180, 0.27);
+  --slma-fog-soft: rgba(200, 224, 255, 0.13);
+  --slma-ground: rgba(134, 190, 255, 0.24);
+  --slma-particle: #d6e9ff;
+  --slma-hero-width: min(38vmin, 360px);
+  --slma-hero-height: min(76vh, 700px);
+}
+
+/* Candlelit skull: soot-black chapel with amber wax and blue flame. */
+:is(.slma-scene-root[data-slma-asset="candlelit-skull.svg"], .slma-scene-root:has(.slma-hero[data-asset="candlelit-skull.svg"])) {
+  --slma-sky-top: #121005;
+  --slma-sky-mid: #30250a;
+  --slma-sky-bottom: #050402;
+  --slma-orb: rgba(255, 193, 39, 0.34);
+  --slma-fog: rgba(118, 88, 27, 0.25);
+  --slma-fog-soft: rgba(41, 127, 255, 0.12);
+  --slma-ground: rgba(255, 193, 31, 0.31);
+  --slma-particle: #ffd65d;
+}
+
+/* Enchanted broom: petrol-blue night with a controlled rainbow flare. */
+:is(.slma-scene-root[data-slma-asset="enchanted-broom.svg"], .slma-scene-root:has(.slma-hero[data-asset="enchanted-broom.svg"])) {
+  --slma-sky-top: #07161c;
+  --slma-sky-mid: #16303a;
+  --slma-sky-bottom: #030708;
+  --slma-orb: rgba(29, 238, 240, 0.28);
+  --slma-fog: rgba(28, 123, 134, 0.26);
+  --slma-fog-soft: rgba(240, 4, 172, 0.13);
+  --slma-ground: rgba(29, 238, 240, 0.27);
+  --slma-particle: #5ffbff;
+  --slma-hero-width: min(76vw, 800px);
+  --slma-hero-height: min(56vh, 540px);
+}
+
+:is(.slma-scene-root[data-slma-asset="enchanted-broom.svg"], .slma-scene-root:has(.slma-hero[data-asset="enchanted-broom.svg"])) .slma-hero svg {
+  transform: scale(1.16);
+  transform-origin: center;
+}
+
+/* Pumpkin secret: near-black stage, a single orange slit and muted olive fog. */
+:is(.slma-scene-root[data-slma-asset="pumpkin-secret.svg"], .slma-scene-root:has(.slma-hero[data-asset="pumpkin-secret.svg"])) {
+  --slma-sky-top: #080905;
+  --slma-sky-mid: #171707;
+  --slma-sky-bottom: #020202;
+  --slma-orb: rgba(255, 120, 12, 0.25);
+  --slma-fog: rgba(91, 90, 23, 0.21);
+  --slma-fog-soft: rgba(255, 96, 9, 0.1);
+  --slma-ground: rgba(255, 102, 12, 0.27);
+  --slma-particle: #ff9d45;
+  --slma-hero-width: min(58vmin, 580px);
+  --slma-hero-height: min(58vmin, 580px);
+}
+
+/* Trick-or-treat mascot: plum sky with lemon moon and berry accents. */
+:is(.slma-scene-root[data-slma-asset="trick-or-treat-ghost.svg"], .slma-scene-root:has(.slma-hero[data-asset="trick-or-treat-ghost.svg"])) {
+  --slma-sky-top: #180925;
+  --slma-sky-mid: #43154d;
+  --slma-sky-bottom: #07050d;
+  --slma-orb: rgba(250, 236, 57, 0.34);
+  --slma-fog: rgba(109, 48, 126, 0.27);
+  --slma-fog-soft: rgba(255, 88, 200, 0.12);
+  --slma-ground: rgba(255, 132, 29, 0.28);
+  --slma-particle: #fff277;
+}
+
+@keyframes slma-fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slma-enter {
+  0% { opacity: 0; transform: translateY(20px) scale(0.88); filter: blur(8px); }
+  68% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes slma-breathe {
+  0%, 100% { transform: scale(0.98) rotate(-1deg); opacity: 0.42; }
+  50% { transform: scale(1.06) rotate(1deg); opacity: 0.68; }
+}
+
+@keyframes slma-haze {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.68; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.94; }
+}
+
+@keyframes slma-fog-drift {
+  0% { transform: translate3d(-5%, 0, 0) scale(1); }
+  100% { transform: translate3d(5%, -3%, 0) scale(1.07); }
+}
+
+@keyframes slma-ground-pulse {
+  0%, 100% { transform: translateX(-50%) scale(0.88); opacity: 0.5; }
+  50% { transform: translateX(-50%) scale(1.08); opacity: 0.84; }
+}
+
+@keyframes slma-fall {
+  0% { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.35); }
+  16% { opacity: var(--slma-star-op, 0.45); }
+  65% { opacity: var(--slma-star-op, 0.45); }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--slma-drift, 0), calc(-100vh - 48px), 0) scale(1.15) rotate(var(--slma-rot, 320deg));
+  }
+}
+
+@keyframes slma-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  to { opacity: 0; transform: translateY(-12px) scale(0.94); filter: blur(6px); }
+}
+
+@media (max-width: 720px) {
+  .slma-scene-root {
+    --slma-hero-width: min(88vw, 620px);
+    --slma-hero-height: min(68vh, 620px);
+  }
+
+  :is(.slma-scene-root[data-slma-asset="ghost-cemetery.svg"], .slma-scene-root:has(.slma-hero[data-asset="ghost-cemetery.svg"])),
+  :is(.slma-scene-root[data-slma-asset="enchanted-broom.svg"], .slma-scene-root:has(.slma-hero[data-asset="enchanted-broom.svg"])) {
+    --slma-hero-width: 94vw;
+    --slma-hero-height: 58vh;
+  }
+
+  :is(.slma-scene-root[data-slma-asset="floating-apparition.svg"], .slma-scene-root:has(.slma-hero[data-asset="floating-apparition.svg"])) {
+    --slma-hero-width: 56vw;
+    --slma-hero-height: 70vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slma-stage { animation: slma-fadein 360ms ease-out forwards; }
+  .slma-stars { display: none; }
+  .slma-fog, .slma-moon-haze, .slma-ground-glow { animation: none; }
+}
